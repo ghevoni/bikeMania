@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Men Bike</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+            crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <!-- Bootstrap Font Icon CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+
+    <style>
+        body {
+            background-color: grey
+        }
+
+        .card-text {
+            text-align: center;
+        }
+
+        .card-title {
+            text-align: center;
+        }
+
+        .card-img-top {
+            width: 200px;
+            height: 130px;
+            align-self: center;
+        }
+
+        .card {
+            margin-top: 100px;
+        }
+
+        .card-body {
+            align-self: center;
+        }
+
+        #navbarDropdown {
+            font-size: 35px;
+            color: dodgerblue;
+        }
+
+        #view {
+            margin-left: 30px;
+        }
+
+        #wlc {
+            text-align: center;
+            margin-top: 20px;
+            list-style-type: none;
+            font-family: "Brush Script MT", serif;
+            font-size: 40px;
+        }
+
+        #left_panel {
+            height: 100%;
+            width: 270px;
+            /*position: absolute;*/
+            position: static;
+            /*z-index: 1;*/
+            top: auto;
+            bottom: 0;
+            left: 0;
+            background-color: #2F4F4F;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        #left_panel a {
+            padding: 20px 6px 6px 90px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #40E0D0;
+            display: block;
+        }
+
+        #left_panel a:hover {
+            color: #f1f1f1;
+        }
+
+        @media screen and (max-height: 450px) {
+            #left_panel {
+                padding-top: 15px;
+            }
+        }
+
+        #both {
+            margin-left: 0;
+        }
+
+
+
+        #cart-margin {
+           margin-left: 180px;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<nav class="nav navbar-light bg-light">
+    <table style="border: none; width: 100%; height:auto;">
+        <tr>
+            <td style="width: 130px;">
+                <a href="#">
+                    <img src="/imagines/bikeLogo.jpg" alt="" width="120" height="120">
+                </a>
+            </td>
+            <td style="margin-left: 0; width:140px;">
+                <h1 style="font-family: Brush Script MT, serif; ">Bike<br> Mania</h1>
+            </td>
+            <td style="width: 900px; padding-top: 30px">
+                <ul class="nav justify-content-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/frontpage">Acasa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/aboutus">Despre noi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/service">Service</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/bike/add"
+                           sec:authorize="hasAuthority('ADMIN')">Adauga o bicicleta</a>
+                    </li>
+                    <li class="nav-item">
+                        <div id="search bar" class="col-sm">
+                            <script type="text/javascript">
+                                function clearSearch() {
+                                    window.location = "[[@{/frontpage}]]";
+                                }
+                            </script>
+                            <form th:action="@{/frontpage}" method="get">
+                                <input type="text" name="keyword" id="keyword" size="20" th:value="${keyword}"
+                                       required/>
+                                <input type="submit" value="Cauta"/>
+                                <input type="button" value="Sterge" id="btnClear" onclick="clearSearch()"/>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="nav-item" style="color:dodgerblue" ;
+                        sec:authorize="hasAnyAuthority('ADMIN', 'USER')"
+                        id="wlc">
+                        Bine ai venit <span sec:authentication="name"/>!
+                    </li>
+                </ul>
+            </td>
+            <td style="width: 60px; padding-bottom: 15px;">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item dropdown" sec:authorize="!isAuthenticated()">
+                        <a id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="/imagines/getIn.jpg" alt="Login" width="50" height="35" title="Login">
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/register">Utilizator nou</a></li>
+                            <li><a class="dropdown-item" href="/login">Utilizator existent</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a id="nav" href="/logout">
+                            <img src="/imagines/getOut.jpg" alt="Logout" width="50" height="35" title="Logout">
+                        </a>
+                    </li>
+                </ul>
+            </td>
+            <td style="padding-left: 10px; padding-right: 80px;">
+                <a href="/get-cart">
+                    <img src="/imagines/shoppingCart.jpg" alt="ShoppingCart" width="50" height="40"
+                         title="Shopping Cart">
+                </a>
+            </td>
+        </tr>
+    </table>
+</nav>
+
+<div id="both">
+    <div class="row">
+        <div class="col-md-2">
+            <div id="left_panel">
+                <a href="/men">Barbati</a>
+                <a href="/ladies">Dame</a>
+                <a href="/children">Copii</a>
+                <a href="/electric">Electrice</a>
+                <a href="/sport">Sport</a>
+
+                <br>
+                <!--    meteo widget-->
+                <a class="weatherwidget-io" href="https://forecast7.com/en/44d4326d10/bucharest/"
+                   data-label_1="BUCHAREST"
+                   data-label_2="WEATHER" data-days="3" data-theme="original">BUCHAREST WEATHER</a>
+                <script>
+                    !function (d, s, id) {
+                        var js, fjs = d.getElementsByTagName(s)[0];
+                        if (!d.getElementById(id)) {
+                            js = d.createElement(s);
+                            js.id = id;
+                            js.src = 'https://weatherwidget.io/js/widget.min.js';
+                            fjs.parentNode.insertBefore(js, fjs);
+                        }
+                    }(document, 'script', 'weatherwidget-io-js');
+                </script>
+
+
+                <!--    widget exchange-->
+                <!-- Exchange Rates Script - EXCHANGERATEWIDGET.COM -->
+                <div style="width:250px;border:1px solid #55A516;text-align:left; margin-left: 0;">
+                    <div style="text-align:left;background-color:#1618A5;
+    width:100%;border-bottom:0px;height:16px; font-size:12px;font-weight:bold;padding:5px 0px;"><span style="margin-left:2px;
+    background-image:url(//www.exchangeratewidget.com/flag.png); background-position: 0 -336px; width:100%; height:15px;
+    background-repeat:no-repeat;padding-left:5px;"><a href="https://www.exchangeratewidget.com/" style="color:#FFFFFF;
+    text-decoration:none;padding-left:22px;" rel="nofollow"></a></span></div>
+                    <script type="text/javascript"
+                            src="//www.exchangeratewidget.com/converter.php?l=en&f=EUR&t=GBP,CHF,CAD,AUD,RUB,MDL,RON,TRY,UAH,USD,&a=1&d=F0F0F0&n=FFFFFF&o=000000&v=5"></script>
+                </div>
+                <!-- End of Exchange Rates Script -->
+            </div>
+        </div>
+
+        <div class="col-md-10">
+                <div class="row" id="cart-margin">
+                        <div th:each="bike:${bikeList}" style="width: 18rem;">
+                            <div class="card">
+                                <img th:src="${bike.imagineUrl}" class="card-img-top" alt="PozeBiciclete">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${bike.brand}"></h5>
+                                    <p class="card-text" th:text="${bike.quantity} + ' Bucati' "></p>
+                                    <p class="card-text" th:text="'Pret ' + ${bike.price} + ' RON' "></p>
+                                    <a th:href="@{'/bike/view/' + ${bike.bikeId}}"
+                                       class="btn btn-primary" id="view">Vezi</a>
+                                    <a th:href="@{'/add-cart/' + ${bike.bikeId}}"
+                                       class="btn btn-primary" id="buy" sec:authorize="hasAuthority('USER')">Cumpara
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</body>
+</html>
+
+
+
+
+
+
+
